@@ -1,0 +1,186 @@
+import 'dart:io';
+
+class Student {
+  int id;
+  String name;
+  int age;
+  String grade;
+
+  Student(
+      {required this.id,
+      required this.name,
+      required this.age,
+      required this.grade});
+
+  @override
+  String toString() {
+    return 'ID: $id, Name: $name, Age: $age, Grade: $grade';
+  }
+}
+
+List<Student> students = [];
+
+int generateUniqueId() {
+  return students.length + 1;
+}
+
+void addStudent(String name, int age, String grade) {
+  int id = generateUniqueId();
+  Student newStudent = Student(id: id, name: name, age: age, grade: grade);
+  students.add(newStudent);
+  print('Student added successfully: $newStudent');
+}
+
+List<Student> getAllStudents() {
+  return students;
+}
+
+Student? getStudentById(int id) {
+  for (var student in students) {
+    if (student.id == id) {
+      return student;
+    }
+  }
+  print('Student with ID $id not found.');
+  return null;
+}
+
+void updateStudent(int id, String name, int age, String grade) {
+  for (var student in students) {
+    if (student.id == id) {
+      student.name = name;
+      student.age = age;
+      student.grade = grade;
+      print('Student updated successfully: $student');
+      return;
+    }
+  }
+  print('Student with ID $id not found.');
+}
+
+void deleteStudent(int id) {
+  for (var student in students) {
+    if (student.id == id) {
+      students.remove(student);
+      print('Student deleted successfully: $student');
+      return;
+    }
+  }
+  print('Student with ID $id not found.');
+}
+
+void teacherPanel() {
+  while (true) {
+    print('\nTeacher Panel');
+    print('1. Add Student');
+    print('2. View All Students');
+    print('3. View Student by ID');
+    print('4. Update Student');
+    print('5. Delete Student');
+    print('6. Exit');
+    stdout.write('Enter your choice: ');
+    String? choice = stdin.readLineSync();
+
+    switch (choice) {
+      case '1':
+        stdout.write('Enter name: ');
+        String name = stdin.readLineSync()!;
+        stdout.write('Enter age: ');
+        int age = int.parse(stdin.readLineSync()!);
+        stdout.write('Enter grade: ');
+        String grade = stdin.readLineSync()!;
+        addStudent(name, age, grade);
+        break;
+      case '2':
+        print('\nAll Students:');
+        for (var student in getAllStudents()) {
+          print(student);
+        }
+        break;
+      case '3':
+        stdout.write('Enter student ID: ');
+        int id = int.parse(stdin.readLineSync()!);
+        var student = getStudentById(id);
+        if (student != null) {
+          print(student);
+        }
+        break;
+      case '4':
+        stdout.write('Enter student ID to update: ');
+        int id = int.parse(stdin.readLineSync()!);
+        stdout.write('Enter new name: ');
+        String name = stdin.readLineSync()!;
+        stdout.write('Enter new age: ');
+        int age = int.parse(stdin.readLineSync()!);
+        stdout.write('Enter new grade: ');
+        String grade = stdin.readLineSync()!;
+        updateStudent(id, name, age, grade);
+        break;
+      case '5':
+        stdout.write('Enter student ID to delete: ');
+        int id = int.parse(stdin.readLineSync()!);
+        deleteStudent(id);
+        break;
+      case '6':
+        return;
+      default:
+        print('Invalid choice. Please try again.');
+    }
+  }
+}
+
+void studentPanel() {
+  while (true) {
+    print('\nStudent Panel');
+    print('1. View All Students');
+    print('2. View Student by ID');
+    print('3. Exit');
+    stdout.write('Enter your choice: ');
+    String? choice = stdin.readLineSync();
+
+    switch (choice) {
+      case '1':
+        print('\nAll Students:');
+        for (var student in getAllStudents()) {
+          print(student);
+        }
+        break;
+      case '2':
+        stdout.write('Enter student ID: ');
+        int id = int.parse(stdin.readLineSync()!);
+        var student = getStudentById(id);
+        if (student != null) {
+          print(student);
+        }
+        break;
+      case '3':
+        return;
+      default:
+        print('Invalid choice. Please try again.');
+    }
+  }
+}
+
+void main() {
+  while (true) {
+    print('\nStudent Management System');
+    print('1. Teacher');
+    print('2. Student');
+    print('3. Exit');
+    stdout.write('Enter your role: ');
+    String? role = stdin.readLineSync();
+
+    switch (role) {
+      case '1':
+        teacherPanel();
+        break;
+      case '2':
+        studentPanel();
+        break;
+      case '3':
+        exit(0);
+      default:
+        print('Invalid role. Please try again.');
+    }
+  }
+}
